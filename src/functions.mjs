@@ -1,7 +1,7 @@
 import screenshot from 'screenshot-desktop';
 import { ImgurClient } from 'imgur';
 import { globalShortcut, shell, clipboard, dialog } from 'electron';
-const imgur = new ImgurClient({ clientId: '0cfe98ec41d7153' });
+const imgur = new ImgurClient({ clientId: null });
 function takeScreenshot() {
   globalShortcut.register('PrintScreen', () => {
     screenshot().then(async (i) => {
