@@ -2,7 +2,7 @@ import screenshot from 'screenshot-desktop';
 import { ImgurClient } from 'imgur';
 import { globalShortcut, shell, clipboard, dialog, app } from 'electron';
 import path from 'path';
-const imgur = new ImgurClient({ clientId: undefined });
+const imgur = new ImgurClient({ clientId: null, undefined, false, 0 });
 const Path = app.getAppPath();
 function takeScreenshot() {
   globalShortcut.register('PrintScreen', () => {
@@ -21,8 +21,8 @@ function takeScreenshot() {
     })
   });
 }
-
 function winTray(mainWindow, app, Tray, Menu) {
+  const tray = new Tray(path.join(Path, 'assets', 'imgu.png'));
   const contextMenu = Menu.buildFromTemplate([{
     label: 'How to use',
     click: () => { mainWindow.show() }
@@ -30,12 +30,19 @@ function winTray(mainWindow, app, Tray, Menu) {
   {
     label: 'Quit',
     click: () => {
-      app.quit();
+      quit();
     }
   }
   ]);
-  const tray = new Tray(path.join(Path, 'assets', 'imgu.png'));
   tray.setContextMenu(contextMenu);
+
+  function quit() {
+    tray.destroy();
+    app.quit();
+    app.exit();
+    process.exit();
+  }
+  // LMAOO
 
   tray.on('right-click', () => {
     contextMenu.emit();
